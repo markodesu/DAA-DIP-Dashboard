@@ -187,12 +187,34 @@
   margin-bottom: 0.75rem;
 }
 
+.explanation-section {
+  margin-top: 1.5rem;
+}
+
+.explanation-toggle {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.explanation-toggle:hover {
+  background: #764ba2;
+}
+
 .explanation {
   background: #f8fafc;
   padding: 1.5rem;
   border-radius: 8px;
   border-left: 4px solid #667eea;
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .explanation h3 {

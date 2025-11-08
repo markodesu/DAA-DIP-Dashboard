@@ -9,6 +9,7 @@ export default function BlurPage() {
   const [image, setImage] = useState(null);
   const [processedImage, setProcessedImage] = useState(null);
   const [blurRadius, setBlurRadius] = useState(3);
+  const [showExplanation, setShowExplanation] = useState(false);
   const originalHistogramRef = useRef(null);
   const processedHistogramRef = useRef(null);
 
@@ -91,8 +92,16 @@ export default function BlurPage() {
         </div>
 
         <div className="explanation-section">
-          <h2>Mathematical Formula</h2>
-          <div className="formula-box">
+          <button 
+            className="explanation-toggle"
+            onClick={() => setShowExplanation(!showExplanation)}
+          >
+            {showExplanation ? "▼" : "▶"} Mathematical Formula & Explanation
+          </button>
+          {showExplanation && (
+            <>
+              <h2>Mathematical Formula</h2>
+              <div className="formula-box">
             <p className="formula">
               <strong>Gaussian Blur:</strong> Uses a Gaussian function for smoothing
             </p>
@@ -151,6 +160,8 @@ export default function BlurPage() {
             <h3>Time Complexity</h3>
             <p>O(n × m × r²) where n and m are image dimensions and r is blur radius. However, modern browsers use optimized algorithms that are more efficient.</p>
           </div>
+            </>
+          )}
         </div>
 
         {image && (

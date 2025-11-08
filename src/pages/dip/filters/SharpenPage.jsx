@@ -9,6 +9,7 @@ export default function SharpenPage() {
   const [image, setImage] = useState(null);
   const [processedImage, setProcessedImage] = useState(null);
   const [sharpenStrength, setSharpenStrength] = useState(100);
+  const [showExplanation, setShowExplanation] = useState(false);
   const originalHistogramRef = useRef(null);
   const processedHistogramRef = useRef(null);
 
@@ -92,8 +93,16 @@ export default function SharpenPage() {
         </div>
 
         <div className="explanation-section">
-          <h2>Mathematical Formula</h2>
-          <div className="formula-box">
+          <button 
+            className="explanation-toggle"
+            onClick={() => setShowExplanation(!showExplanation)}
+          >
+            {showExplanation ? "▼" : "▶"} Mathematical Formula & Explanation
+          </button>
+          {showExplanation && (
+            <>
+              <h2>Mathematical Formula</h2>
+              <div className="formula-box">
             <p className="formula">
               <strong>Sharpening Kernel:</strong>
             </p>
@@ -181,6 +190,8 @@ export default function SharpenPage() {
             <h3>Time Complexity</h3>
             <p>O(n × m × k²) where n and m are image dimensions and k is kernel size (3).</p>
           </div>
+            </>
+          )}
         </div>
 
         {image && (

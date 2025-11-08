@@ -6,6 +6,7 @@ export default function CoinChanging() {
   const [coins, setCoins] = useState([1, 5, 10, 25]);
   const [amount, setAmount] = useState(30);
   const [solution, setSolution] = useState(null);
+  const [showExplanation, setShowExplanation] = useState(false);
 
   const addCoin = () => {
     setCoins([...coins, 0]);
@@ -181,16 +182,36 @@ export default function CoinChanging() {
               </table>
             </div>
 
-            <div className="explanation">
-              <h3>Explanation</h3>
-              <p>
-                The Dynamic Programming approach builds a 2D table where dp[i][j] represents the minimum
-                number of coins needed to make amount j using the first i coins. For each coin and amount,
-                we decide whether to use the current coin or not, choosing the option that minimizes the total count.
-              </p>
-              <p style={{marginTop: '0.5rem'}}>
-                <strong>Recurrence Relation:</strong> dp[i][j] = min(dp[i-1][j], dp[i][j-coin] + 1)
-              </p>
+            <div className="explanation-section">
+              <button 
+                className="explanation-toggle"
+                onClick={() => setShowExplanation(!showExplanation)}
+              >
+                {showExplanation ? "▼" : "▶"} Algorithm Explanation
+              </button>
+              {showExplanation && (
+                <div className="explanation">
+                  <h4>Dynamic Programming Approach</h4>
+                  <p>
+                    The DP approach builds a 2D table where dp[i][j] represents the minimum
+                    number of coins needed to make amount j using the first i coins.
+                  </p>
+                  <p><strong>Recurrence Relation:</strong></p>
+                  <p className="formula">dp[i][j] = min(dp[i-1][j], dp[i][j-coin] + 1)</p>
+                  <p><strong>Base Cases:</strong></p>
+                  <ul>
+                    <li>dp[i][0] = 0 for all i (0 coins needed for amount 0)</li>
+                    <li>dp[0][j] = ∞ for j > 0 (impossible with no coins)</li>
+                  </ul>
+                  <p><strong>Algorithm:</strong></p>
+                  <ol>
+                    <li>For each coin and each amount, decide whether to use the coin</li>
+                    <li>If coin ≤ amount: dp[i][j] = min(not using coin, using coin)</li>
+                    <li>If coin > amount: dp[i][j] = dp[i-1][j] (can't use coin)</li>
+                  </ol>
+                  <p><strong>Time Complexity:</strong> O(n × m) where n is number of coins and m is amount</p>
+                </div>
+              )}
             </div>
           </div>
         )}

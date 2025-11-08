@@ -34,6 +34,12 @@ export default function DAAHome() {
           <h2>Coin Changing Problem</h2>
           <p>Dynamic Programming solution with table and tree visualization</p>
         </Link>
+
+        <Link to="/daa/tsp" className="algorithm-card">
+          <div className="algorithm-icon">🗺️</div>
+          <h2>TSP (Traveling Salesman)</h2>
+          <p>Branch and Bound + Brute Force algorithms</p>
+        </Link>
       </div>
     </div>
   );

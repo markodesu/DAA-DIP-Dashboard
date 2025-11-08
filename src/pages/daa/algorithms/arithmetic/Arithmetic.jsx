@@ -8,6 +8,7 @@ export default function Arithmetic() {
   const [decoded, setDecoded] = useState(null);
   const [probabilities, setProbabilities] = useState(null);
   const [ranges, setRanges] = useState(null);
+  const [showExplanation, setShowExplanation] = useState(false);
 
   const calculateProbabilities = (text) => {
     const freq = {};
@@ -207,13 +208,43 @@ export default function Arithmetic() {
               )}
             </div>
 
-            <div className="explanation">
-              <h3>Explanation</h3>
-              <p>
-                Arithmetic Encoding maps a sequence of symbols to a single number in the range [0, 1).
-                Each symbol narrows the range based on its probability. The final range represents the
-                entire sequence, and any number in that range can decode back to the original sequence.
-              </p>
+            <div className="explanation-section">
+              <button 
+                className="explanation-toggle"
+                onClick={() => setShowExplanation(!showExplanation)}
+              >
+                {showExplanation ? "▼" : "▶"} Algorithm Explanation
+              </button>
+              {showExplanation && (
+                <div className="explanation">
+                  <h4>Arithmetic Encoding Algorithm</h4>
+                  <p>
+                    Arithmetic Encoding maps a sequence of symbols to a single number in the range [0, 1).
+                    Each symbol narrows the range based on its probability.
+                  </p>
+                  <p><strong>Encoding Process:</strong></p>
+                  <ol>
+                    <li>Calculate probability of each character</li>
+                    <li>Build cumulative ranges for each character</li>
+                    <li>Start with range [0, 1)</li>
+                    <li>For each symbol, narrow the range:
+                      <ul>
+                        <li>newLow = low + (high - low) × charRange.low</li>
+                        <li>newHigh = low + (high - low) × charRange.high</li>
+                      </ul>
+                    </li>
+                    <li>Output any number in the final range</li>
+                  </ol>
+                  <p><strong>Decoding Process:</strong></p>
+                  <ol>
+                    <li>Start with encoded value and initial range [0, 1)</li>
+                    <li>Determine which character's range contains the value</li>
+                    <li>Output that character</li>
+                    <li>Update range and value, repeat until all characters decoded</li>
+                  </ol>
+                  <p><strong>Time Complexity:</strong> O(n) where n is length of input</p>
+                </div>
+              )}
             </div>
           </div>
         )}

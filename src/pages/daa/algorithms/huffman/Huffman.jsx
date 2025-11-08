@@ -18,6 +18,7 @@ export default function Huffman() {
   const [tree, setTree] = useState(null);
   const [codes, setCodes] = useState(null);
   const [mergeSteps, setMergeSteps] = useState([]);
+  const [showExplanation, setShowExplanation] = useState(false);
 
   const buildHuffmanTree = (frequencies) => {
     const nodes = Object.entries(frequencies).map(
@@ -234,13 +235,32 @@ export default function Huffman() {
               )}
             </div>
 
-            <div className="explanation">
-              <h3>Explanation</h3>
-              <p>
-                Huffman Coding assigns variable-length codes to characters based on their frequency.
-                More frequent characters get shorter codes. The algorithm builds a binary tree where
-                characters are leaves, and the path from root to leaf gives the code.
-              </p>
+            <div className="explanation-section">
+              <button 
+                className="explanation-toggle"
+                onClick={() => setShowExplanation(!showExplanation)}
+              >
+                {showExplanation ? "▼" : "▶"} Algorithm Explanation
+              </button>
+              {showExplanation && (
+                <div className="explanation">
+                  <h4>Huffman Coding Algorithm</h4>
+                  <p>
+                    Huffman Coding assigns variable-length codes to characters based on their frequency.
+                    More frequent characters get shorter codes, achieving optimal compression.
+                  </p>
+                  <p><strong>Algorithm Steps:</strong></p>
+                  <ol>
+                    <li>Count frequency of each character</li>
+                    <li>Create a leaf node for each character with its frequency</li>
+                    <li>Repeatedly merge two nodes with lowest frequencies</li>
+                    <li>Assign 0 to left branch, 1 to right branch</li>
+                    <li>Traverse tree to get codes (path from root to leaf)</li>
+                  </ol>
+                  <p><strong>Time Complexity:</strong> O(n log n) where n is number of unique characters</p>
+                  <p><strong>Optimality:</strong> Produces prefix-free codes with minimum expected length</p>
+                </div>
+              )}
             </div>
           </div>
         )}

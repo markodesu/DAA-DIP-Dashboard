@@ -6,6 +6,7 @@ import Knapsack from "./pages/daa/algorithms/knapsack/Knapsack";
 import Huffman from "./pages/daa/algorithms/huffman/Huffman";
 import Arithmetic from "./pages/daa/algorithms/arithmetic/Arithmetic";
 import CoinChanging from "./pages/daa/algorithms/coinChanging/CoinChanging";
+import TSP from "./pages/daa/algorithms/tsp/TSP";
 import DIPHome from "./pages/dip/DIPHome";
 import GrayscalePage from "./pages/dip/filters/GrayscalePage";
 import NegativePage from "./pages/dip/filters/NegativePage";
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/daa/huffman" element={<Huffman />} />
             <Route path="/daa/arithmetic" element={<Arithmetic />} />
             <Route path="/daa/coin-changing" element={<CoinChanging />} />
+            <Route path="/daa/tsp" element={<TSP />} />
 
             {/* DIP Section */}
             <Route path="/dip" element={<DIPHome />} />

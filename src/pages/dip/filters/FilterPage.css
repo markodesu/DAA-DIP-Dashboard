@@ -52,7 +52,32 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.input-section h2,
+.input-section h2 {
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.explanation-toggle {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: left;
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.explanation-toggle:hover {
+  background: #764ba2;
+}
+
 .explanation-section h2,
 .results-section h2 {
   color: #1e293b;

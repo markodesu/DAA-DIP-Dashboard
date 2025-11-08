@@ -14,6 +14,7 @@ export default function Sidebar() {
             <li><Link to="/daa/huffman">Huffman Coding</Link></li>
             <li><Link to="/daa/arithmetic">Arithmetic Encoding</Link></li>
             <li><Link to="/daa/coin-changing">Coin Changing</Link></li>
+            <li><Link to="/daa/tsp">TSP (Branch & Bound)</Link></li>
           </ul>
         </div>
 

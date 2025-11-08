@@ -9,6 +9,7 @@ export default function ConvolutionPage() {
   const [image, setImage] = useState(null);
   const [processedImage, setProcessedImage] = useState(null);
   const [kernelType, setKernelType] = useState("emboss");
+  const [showExplanation, setShowExplanation] = useState(false);
   const originalHistogramRef = useRef(null);
   const processedHistogramRef = useRef(null);
 
@@ -107,8 +108,16 @@ export default function ConvolutionPage() {
         </div>
 
         <div className="explanation-section">
-          <h2>Mathematical Formula</h2>
-          <div className="formula-box">
+          <button 
+            className="explanation-toggle"
+            onClick={() => setShowExplanation(!showExplanation)}
+          >
+            {showExplanation ? "▼" : "▶"} Mathematical Formula & Explanation
+          </button>
+          {showExplanation && (
+            <>
+              <h2>Mathematical Formula</h2>
+              <div className="formula-box">
             <p className="formula">
               <strong>Convolution Operation:</strong>
             </p>
@@ -193,6 +202,8 @@ export default function ConvolutionPage() {
             <h3>Time Complexity</h3>
             <p>O(n × m × k²) where n and m are image dimensions and k is kernel size (typically 3).</p>
           </div>
+            </>
+          )}
         </div>
 
         {image && (

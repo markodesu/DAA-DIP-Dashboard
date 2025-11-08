@@ -8,6 +8,7 @@ import "./FilterPage.css";
 export default function HistogramPage() {
   const [image, setImage] = useState(null);
   const [processedImage, setProcessedImage] = useState(null);
+  const [showExplanation, setShowExplanation] = useState(false);
   const originalHistogramRef = useRef(null);
   const processedHistogramRef = useRef(null);
 
@@ -68,8 +69,16 @@ export default function HistogramPage() {
         </div>
 
         <div className="explanation-section">
-          <h2>Mathematical Formula</h2>
-          <div className="formula-box">
+          <button 
+            className="explanation-toggle"
+            onClick={() => setShowExplanation(!showExplanation)}
+          >
+            {showExplanation ? "▼" : "▶"} Mathematical Formula & Explanation
+          </button>
+          {showExplanation && (
+            <>
+              <h2>Mathematical Formula</h2>
+              <div className="formula-box">
             <p className="formula">
               <strong>Equalized Value:</strong> P' = round((CDF(P) - CDF_min) / (N - CDF_min) × 255)
             </p>
@@ -144,6 +153,8 @@ export default function HistogramPage() {
             <h3>Time Complexity</h3>
             <p>O(n × m + 256) where n and m are image dimensions. The 256 term comes from histogram and CDF calculation.</p>
           </div>
+            </>
+          )}
         </div>
 
         {image && (

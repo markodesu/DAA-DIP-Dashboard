@@ -9,6 +9,7 @@ export default function ThresholdPage() {
   const [image, setImage] = useState(null);
   const [processedImage, setProcessedImage] = useState(null);
   const [threshold, setThreshold] = useState(128);
+  const [showExplanation, setShowExplanation] = useState(false);
   const originalHistogramRef = useRef(null);
   const processedHistogramRef = useRef(null);
 
@@ -91,8 +92,16 @@ export default function ThresholdPage() {
         </div>
 
         <div className="explanation-section">
-          <h2>Mathematical Formula</h2>
-          <div className="formula-box">
+          <button 
+            className="explanation-toggle"
+            onClick={() => setShowExplanation(!showExplanation)}
+          >
+            {showExplanation ? "▼" : "▶"} Mathematical Formula & Explanation
+          </button>
+          {showExplanation && (
+            <>
+              <h2>Mathematical Formula</h2>
+              <div className="formula-box">
             <p className="formula">
               <strong>Threshold Transformation:</strong>
             </p>
@@ -164,6 +173,8 @@ export default function ThresholdPage() {
             <h3>Time Complexity</h3>
             <p>O(n × m) where n and m are the width and height of the image. Each pixel is processed once.</p>
           </div>
+            </>
+          )}
         </div>
 
         {image && (

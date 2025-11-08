@@ -7,6 +7,7 @@ export default function Knapsack() {
   const [capacity, setCapacity] = useState(50);
   const [solution, setSolution] = useState(null);
   const [viewMode, setViewMode] = useState("table"); // "table", "greedy", "tree"
+  const [showExplanation, setShowExplanation] = useState(false);
 
   const addItem = () => {
     setItems([...items, { weight: 0, value: 0 }]);
@@ -224,13 +225,29 @@ export default function Knapsack() {
                   </table>
                 </div>
 
-                <div className="explanation">
-                  <h3>Explanation</h3>
-                  <p>
-                    The Dynamic Programming approach builds a table where dp[i][w] represents the maximum value
-                    achievable with the first i items and capacity w. For each item, we decide whether to include it
-                    (if it fits) or exclude it, choosing the option that gives maximum value.
-                  </p>
+                <div className="explanation-section">
+                  <button 
+                    className="explanation-toggle"
+                    onClick={() => setShowExplanation(!showExplanation)}
+                  >
+                    {showExplanation ? "▼" : "▶"} Algorithm Explanation
+                  </button>
+                  {showExplanation && (
+                    <div className="explanation">
+                      <h4>Dynamic Programming Approach</h4>
+                      <p>
+                        The DP approach builds a table where dp[i][w] represents the maximum value
+                        achievable with the first i items and capacity w.
+                      </p>
+                      <p><strong>Recurrence Relation:</strong></p>
+                      <p className="formula">dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i]] + value[i])</p>
+                      <p>
+                        For each item, we decide whether to include it (if it fits) or exclude it,
+                        choosing the option that gives maximum value.
+                      </p>
+                      <p><strong>Time Complexity:</strong> O(n × W) where n is number of items and W is capacity</p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -254,12 +271,30 @@ export default function Knapsack() {
                   </ol>
                 </div>
 
-                <div className="explanation">
-                  <h3>Explanation</h3>
-                  <p>
-                    The Greedy approach sorts items by their value-to-weight ratio and selects items in that order
-                    until the capacity is exhausted. This is faster but may not give the optimal solution.
-                  </p>
+                <div className="explanation-section">
+                  <button 
+                    className="explanation-toggle"
+                    onClick={() => setShowExplanation(!showExplanation)}
+                  >
+                    {showExplanation ? "▼" : "▶"} Algorithm Explanation
+                  </button>
+                  {showExplanation && (
+                    <div className="explanation">
+                      <h4>Greedy Approach</h4>
+                      <p>
+                        The Greedy approach sorts items by their value-to-weight ratio and selects items in that order
+                        until the capacity is exhausted.
+                      </p>
+                      <p><strong>Algorithm:</strong></p>
+                      <ol>
+                        <li>Calculate ratio = value/weight for each item</li>
+                        <li>Sort items by ratio (descending)</li>
+                        <li>Select items in sorted order until capacity is full</li>
+                      </ol>
+                      <p><strong>Time Complexity:</strong> O(n log n) for sorting</p>
+                      <p><strong>Note:</strong> This is faster but may not give the optimal solution.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

@@ -1,0 +1,395 @@
+.tsp-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.tsp-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.tsp-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tsp-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+}
+
+.input-section,
+.solution-section {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.input-section h2,
+.solution-section h2 {
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.city-count-input {
+  margin-bottom: 1.5rem;
+}
+
+.city-count-input label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.city-count-input input {
+  padding: 0.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 80px;
+}
+
+.distance-matrix {
+  margin-bottom: 1.5rem;
+}
+
+.distance-matrix h3 {
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.matrix-note {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.matrix-container {
+  overflow-x: auto;
+}
+
+.distance-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.distance-table th,
+.distance-table td {
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.distance-table th {
+  background: #667eea;
+  color: white;
+  font-weight: 600;
+}
+
+.distance-table .row-label {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.distance-input {
+  width: 60px;
+  padding: 0.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.distance-input:disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.method-selector {
+  margin: 1.5rem 0;
+}
+
+.method-selector h3 {
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.method-selector label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  cursor: pointer;
+  color: #475569;
+  font-weight: 500;
+}
+
+.solve-btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.solve-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.solution-info {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.solution-info p {
+  margin: 0.75rem 0;
+  color: #1e293b;
+  font-size: 1.1rem;
+}
+
+.explored-nodes,
+.all-paths {
+  margin-bottom: 1.5rem;
+}
+
+.explored-nodes h3,
+.all-paths h3 {
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.exploration-note,
+.paths-note {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.nodes-table-container,
+.paths-table-container {
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.nodes-table,
+.paths-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.nodes-table th,
+.nodes-table td,
+.paths-table th,
+.paths-table td {
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.nodes-table th,
+.paths-table th {
+  background: #667eea;
+  color: white;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.nodes-table .pruned-node {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.paths-table .optimal-path {
+  background: #d1fae5;
+  border: 2px solid #10b981;
+}
+
+.explanation-section {
+  margin-top: 1.5rem;
+}
+
+.explanation-toggle {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.explanation-toggle:hover {
+  background: #764ba2;
+}
+
+.explanation {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+  margin-top: 0.5rem;
+}
+
+.reduction-steps {
+  margin-bottom: 1.5rem;
+}
+
+.reduction-steps h3 {
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.reduction-note {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.reduction-step {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 2px solid #e2e8f0;
+}
+
+.reduction-step h4 {
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.matrix-display {
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.reduction-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.reduction-matrix th,
+.reduction-matrix td {
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.reduction-matrix th {
+  background: #667eea;
+  color: white;
+  font-weight: 600;
+}
+
+.reduction-matrix .row-label {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.reduction-matrix .min-cell {
+  background: #fef3c7;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.reduction-matrix .total-cell {
+  background: #d1fae5;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.reduction-matrix .inf-cell {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.reduction-matrix .diagonal-cell {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.reduction-cost,
+.edge-info {
+  margin: 0.5rem 0;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.total-bound {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background: #d1fae5;
+  border-radius: 6px;
+  color: #065f46;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.explanation h3 {
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.explanation h4 {
+  color: #475569;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.explanation p,
+.explanation ol,
+.explanation ul {
+  color: #64748b;
+  line-height: 1.8;
+  margin: 0.75rem 0;
+}
+
+.explanation ol,
+.explanation ul {
+  margin-left: 1.5rem;
+}
+
+.explanation li {
+  margin: 0.5rem 0;
+}
+
+@media (max-width: 1024px) {
+  .tsp-content {
+    grid-template-columns: 1fr;
+  }
+}
+
