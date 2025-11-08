@@ -1,7 +1,8 @@
+// src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import DAAHome from "./pages/daa/DAAHome";
-import DIPHome from "./pages/dip/DIPHome";
+import DIPDashboard from "./components/DIPDashboard";
 import "./App.css";
 
 export default function App() {
@@ -11,9 +12,17 @@ export default function App() {
         <Sidebar />
         <div className="content">
           <Routes>
-            <Route path="/" element={<Navigate to="/daa" />} />
+            {/* Default redirect to /daa */}
+            <Route path="/" element={<Navigate to="/daa" replace />} />
+
+            {/* DAA Section */}
             <Route path="/daa" element={<DAAHome />} />
-            <Route path="/dip" element={<DIPHome />} />
+
+            {/* DIP Section */}
+            <Route path="/dip" element={<DIPDashboard />} />
+
+            {/* Catch-all redirect */}
+            <Route path="*" element={<Navigate to="/daa" replace />} />
           </Routes>
         </div>
       </div>
