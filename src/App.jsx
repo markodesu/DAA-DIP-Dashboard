@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import DAAHome from "./pages/daa/DAAHome";
-import DIPDashboard from "./components/DIPDashboard";
+import DIPDashboard from "./pages/dip/DIPDashboard";
 import "./App.css";
 
 export default function App() {
