@@ -70,6 +70,12 @@ export default function DIPHome() {
           <h2>Separate Channels</h2>
           <p>Visualize RGB channels separately</p>
         </Link>
+
+        <Link to="/dip/ann-cnn" className="filter-card">
+          <div className="filter-icon">🧠</div>
+          <h2>ANN & CNN</h2>
+          <p>Interactive visualization of Neural Networks with activation functions</p>
+        </Link>
       </div>
     </div>
   );

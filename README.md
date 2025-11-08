@@ -1,16 +1,125 @@
-# React + Vite
+# DAA + DIP Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive web application for visualizing and learning Design and Analysis of Algorithms (DAA) and Digital Image Processing (DIP) concepts.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### DAA (Design and Analysis of Algorithms)
+- **0/1 Knapsack Problem** - Dynamic Programming and Greedy approaches with table visualization
+- **Huffman Coding** - Lossless compression with step-by-step merging process
+- **Arithmetic Encoding/Decoding** - Probability-based compression algorithm
+- **Coin Changing Problem** - Dynamic Programming with 2D table visualization
+- **TSP (Traveling Salesman Problem)** - Branch and Bound with matrix reduction visualization
 
-## React Compiler
+### DIP (Digital Image Processing)
+- **Grayscale Conversion** - Luminance-based conversion with formulas
+- **Negative Transformation** - Image inversion
+- **Histogram Equalization** - Contrast enhancement
+- **Brightness & Contrast** - Interactive adjustment with sliders
+- **Blur** - Gaussian blur with radius control
+- **Edge Detection** - Sobel operator implementation
+- **Threshold** - Binary thresholding
+- **Sharpen** - Unsharp mask filtering
+- **Convolution** - Custom kernel convolution (Emboss, Sharpen, Edge Detection, Blur)
+- **Channel Separation** - RGB channel visualization
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **React 19** - UI framework
+- **React Router DOM** - Client-side routing
+- **Vite** - Build tool and dev server
+- **Canvas API** - Image processing and histogram visualization
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20.19.0 or higher
+- npm or yarn
+
+### Installation
+
+```bash
+# Navigate to dashboard directory
+cd dashboard
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+This creates a `dist` folder with production-ready files.
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Project Structure
+
+```
+dashboard/
+├── src/
+│   ├── components/          # Reusable components (Sidebar)
+│   ├── pages/
+│   │   ├── daa/            # DAA algorithm pages
+│   │   │   └── algorithms/ # Individual algorithm implementations
+│   │   └── dip/            # DIP filter pages
+│   │       └── filters/     # Image filter implementations
+│   ├── App.jsx             # Main app component with routing
+│   └── main.jsx            # Entry point
+├── public/                 # Static assets
+└── dist/                  # Production build (generated)
+```
+
+## Deployment
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+
+### Quick Deploy Options:
+
+**Vercel (Recommended):**
+```bash
+npm i -g vercel
+cd dashboard
+vercel --prod
+```
+
+**Netlify:**
+```bash
+npm i -g netlify-cli
+cd dashboard
+netlify deploy --prod
+```
+
+## Features
+
+- ✅ Interactive algorithm visualizations
+- ✅ Step-by-step explanations with formulas
+- ✅ Collapsible explanation sections
+- ✅ Real-time image processing
+- ✅ Histogram visualizations
+- ✅ Responsive design
+- ✅ Sidebar navigation
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## License
+
+This project is for educational purposes.

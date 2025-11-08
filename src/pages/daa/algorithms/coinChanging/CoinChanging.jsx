@@ -201,13 +201,13 @@ export default function CoinChanging() {
                   <p><strong>Base Cases:</strong></p>
                   <ul>
                     <li>dp[i][0] = 0 for all i (0 coins needed for amount 0)</li>
-                    <li>dp[0][j] = ∞ for j > 0 (impossible with no coins)</li>
+                    <li>dp[0][j] = ∞ for j &gt; 0 (impossible with no coins)</li>
                   </ul>
                   <p><strong>Algorithm:</strong></p>
                   <ol>
                     <li>For each coin and each amount, decide whether to use the coin</li>
-                    <li>If coin ≤ amount: dp[i][j] = min(not using coin, using coin)</li>
-                    <li>If coin > amount: dp[i][j] = dp[i-1][j] (can't use coin)</li>
+                      <li>If coin ≤ amount: dp[i][j] = min(not using coin, using coin)</li>
+                      <li>If coin &gt; amount: dp[i][j] = dp[i-1][j] (can't use coin)</li>
                   </ol>
                   <p><strong>Time Complexity:</strong> O(n × m) where n is number of coins and m is amount</p>
                 </div>

@@ -19,6 +19,7 @@ import ThresholdPage from "./pages/dip/filters/ThresholdPage";
 import SharpenPage from "./pages/dip/filters/SharpenPage";
 import ChannelsPage from "./pages/dip/filters/ChannelsPage";
 import DIPDashboard from "./pages/dip/DIPDashboard";
+import ANNCNNPage from "./pages/dip/ANNCNNPage";
 import "./App.css";
 
 export default function App() {
@@ -52,6 +53,7 @@ export default function App() {
             <Route path="/dip/threshold" element={<ThresholdPage />} />
             <Route path="/dip/sharpen" element={<SharpenPage />} />
             <Route path="/dip/channels" element={<ChannelsPage />} />
+            <Route path="/dip/ann-cnn" element={<ANNCNNPage />} />
 
             {/* Catch-all redirect */}
             <Route path="*" element={<Navigate to="/daa" replace />} />

@@ -32,6 +32,7 @@ export default function Sidebar() {
             <li><Link to="/dip/sharpen">Sharpen</Link></li>
             <li><Link to="/dip/convolution">Convolution</Link></li>
             <li><Link to="/dip/channels">Separate Channels</Link></li>
+            <li><Link to="/dip/ann-cnn">ANN & CNN</Link></li>
           </ul>
         </div>
       </nav>
