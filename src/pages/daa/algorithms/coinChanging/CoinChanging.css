@@ -137,8 +137,15 @@
 
 .dp-table-container h3 {
   color: #1e293b;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   font-size: 1.3rem;
+}
+
+.table-explanation {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  font-style: italic;
 }
 
 .dp-table {
@@ -178,6 +185,11 @@
 .dp-table .impossible-cell {
   background: #fee2e2;
   color: #991b1b;
+  font-weight: 600;
+}
+
+.dp-table .base-cell {
+  background: #f1f5f9;
   font-weight: 600;
 }
 

@@ -4,38 +4,8 @@
   font-family: sans-serif;
 }
 
-.sidebar {
-  width: 260px;
-  background: #1e293b;
-  color: white;
-  padding: 1rem;
-}
-
-.sidebar h2 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar li {
-  margin: 0.5rem 0;
-}
-
-.sidebar a {
-  color: #cbd5e1;
-  text-decoration: none;
-}
-
-.sidebar a:hover {
-  color: white;
-}
-
 .content {
   flex: 1;
-  padding: 2rem;
+  overflow-y: auto;
   background: #f1f5f9;
 }

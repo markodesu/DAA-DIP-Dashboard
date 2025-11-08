@@ -23,32 +23,54 @@ export default function CoinChanging() {
 
   const solveDP = () => {
     const sortedCoins = [...coins].filter(c => c > 0).sort((a, b) => a - b);
-    const dp = Array(amount + 1).fill(Infinity);
+    const n = sortedCoins.length;
+    
+    // Build 2D DP table: dp[i][j] = min coins needed for amount j using first i coins
+    const dp = Array(n + 1).fill(null).map(() => Array(amount + 1).fill(Infinity));
     const parent = Array(amount + 1).fill(-1);
-    dp[0] = 0;
+    
+    // Base case: 0 coins needed for amount 0
+    for (let i = 0; i <= n; i++) {
+      dp[i][0] = 0;
+    }
 
     // Build DP table
-    for (let i = 1; i <= amount; i++) {
-      for (const coin of sortedCoins) {
-        if (coin <= i && dp[i - coin] + 1 < dp[i]) {
-          dp[i] = dp[i - coin] + 1;
-          parent[i] = coin;
+    for (let i = 1; i <= n; i++) {
+      const coin = sortedCoins[i - 1];
+      for (let j = 0; j <= amount; j++) {
+        // Don't use current coin
+        dp[i][j] = dp[i - 1][j];
+        
+        // Use current coin if possible
+        if (coin <= j && dp[i][j - coin] + 1 < dp[i][j]) {
+          dp[i][j] = dp[i][j - coin] + 1;
+          if (j === amount) {
+            parent[j] = coin;
+          }
         }
       }
     }
 
-    // Find coin combination
+    // Find coin combination using backtracking
     const combination = [];
     let current = amount;
-    while (current > 0 && parent[current] !== -1) {
-      combination.push(parent[current]);
-      current -= parent[current];
+    let coinIdx = n;
+    
+    while (current > 0 && coinIdx > 0) {
+      const coin = sortedCoins[coinIdx - 1];
+      // Check if this coin was used
+      if (coin <= current && dp[coinIdx][current] === dp[coinIdx][current - coin] + 1) {
+        combination.push(coin);
+        current -= coin;
+      } else {
+        coinIdx--;
+      }
     }
 
     return {
       dp,
       combination,
-      minCoins: dp[amount] === Infinity ? -1 : dp[amount],
+      minCoins: dp[n][amount] === Infinity ? -1 : dp[n][amount],
       sortedCoins,
     };
   };
@@ -108,10 +130,13 @@ export default function CoinChanging() {
 
             <div className="dp-table-container">
               <h3>DP Table</h3>
+              <p className="table-explanation">
+                Rows represent coins, columns represent amounts. Each cell shows minimum coins needed for that amount using coins up to that row.
+              </p>
               <table className="dp-table">
                 <thead>
                   <tr>
-                    <th>Amount</th>
+                    <th>Coin/Amount</th>
                     {Array.from({ length: amount + 1 }, (_, i) => (
                       <th key={i}>{i}</th>
                     ))}
@@ -119,22 +144,39 @@ export default function CoinChanging() {
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="row-label">Min Coins</td>
-                    {solution.dp.map((value, i) => (
+                    <td className="row-label">0 (no coins)</td>
+                    {solution.dp[0].map((value, i) => (
                       <td
                         key={i}
                         className={
-                          value !== Infinity && i === amount
-                            ? "solution-cell"
-                            : value === Infinity
-                            ? "impossible-cell"
-                            : ""
+                          value === Infinity ? "impossible-cell" : i === 0 ? "base-cell" : ""
                         }
                       >
                         {value === Infinity ? "∞" : value}
                       </td>
                     ))}
                   </tr>
+                  {solution.sortedCoins.map((coin, coinIdx) => (
+                    <tr key={coin}>
+                      <td className="row-label">Coin {coin}</td>
+                      {solution.dp[coinIdx + 1].map((value, i) => (
+                        <td
+                          key={i}
+                          className={
+                            value !== Infinity && i === amount && coinIdx === solution.sortedCoins.length - 1
+                              ? "solution-cell"
+                              : value === Infinity
+                              ? "impossible-cell"
+                              : i === 0
+                              ? "base-cell"
+                              : ""
+                          }
+                        >
+                          {value === Infinity ? "∞" : value}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -142,9 +184,12 @@ export default function CoinChanging() {
             <div className="explanation">
               <h3>Explanation</h3>
               <p>
-                The Dynamic Programming approach builds a table where dp[i] represents the minimum
-                number of coins needed to make amount i. For each amount, we try all coins and choose
-                the one that minimizes the total count.
+                The Dynamic Programming approach builds a 2D table where dp[i][j] represents the minimum
+                number of coins needed to make amount j using the first i coins. For each coin and amount,
+                we decide whether to use the current coin or not, choosing the option that minimizes the total count.
+              </p>
+              <p style={{marginTop: '0.5rem'}}>
+                <strong>Recurrence Relation:</strong> dp[i][j] = min(dp[i-1][j], dp[i][j-coin] + 1)
               </p>
             </div>
           </div>

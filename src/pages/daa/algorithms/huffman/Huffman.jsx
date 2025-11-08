@@ -17,20 +17,51 @@ export default function Huffman() {
   const [decoded, setDecoded] = useState(null);
   const [tree, setTree] = useState(null);
   const [codes, setCodes] = useState(null);
+  const [mergeSteps, setMergeSteps] = useState([]);
 
   const buildHuffmanTree = (frequencies) => {
     const nodes = Object.entries(frequencies).map(
       ([char, freq]) => new HuffmanNode(char, freq)
     );
+    const steps = [];
+    const nodeToLabel = new Map(); // Map nodes to their labels
+    let stepNumber = 1;
+
+    // Initialize labels for character nodes
+    nodes.forEach(node => {
+      if (node.char !== null) {
+        nodeToLabel.set(node, `'${node.char}'`);
+      }
+    });
 
     while (nodes.length > 1) {
       nodes.sort((a, b) => a.freq - b.freq);
       const left = nodes.shift();
       const right = nodes.shift();
-      const merged = new HuffmanNode(null, left.freq + right.freq, left, right);
+      const sum = left.freq + right.freq;
+      
+      // Get labels for left and right nodes
+      const leftLabel = nodeToLabel.get(left) || `M${stepNumber - 1}`;
+      const rightLabel = nodeToLabel.get(right) || `M${stepNumber - 1}`;
+      
+      const merged = new HuffmanNode(null, sum, left, right);
+      const mergedLabel = `M${stepNumber}`;
+      nodeToLabel.set(merged, mergedLabel);
+      
+      steps.push({
+        step: stepNumber,
+        left: { label: leftLabel, freq: left.freq },
+        right: { label: rightLabel, freq: right.freq },
+        sum: sum,
+        assignment: `Left=0, Right=1`,
+        mergedLabel: mergedLabel
+      });
+      
       nodes.push(merged);
+      stepNumber++;
     }
 
+    setMergeSteps(steps);
     return nodes[0];
   };
 
@@ -142,6 +173,47 @@ export default function Huffman() {
                 </tbody>
               </table>
             </div>
+
+            {mergeSteps.length > 0 && (
+              <div className="merge-steps-table">
+                <h3>Step-by-Step Merging Process</h3>
+                <p className="merge-explanation">
+                  Starting from the two lowest probabilities, merge them and assign 0 to left, 1 to right.
+                  Continue until all nodes are merged into a single tree.
+                </p>
+                <table className="merge-table">
+                  <thead>
+                    <tr>
+                      <th>Step</th>
+                      <th>Left Node</th>
+                      <th>Right Node</th>
+                      <th>Sum (New Probability)</th>
+                      <th>Code Assignment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {mergeSteps.map((step, idx) => (
+                      <tr key={step.step} className={idx === mergeSteps.length - 1 ? "final-step" : ""}>
+                        <td className="step-number">{step.step}</td>
+                        <td>{step.left.label} (freq: {step.left.freq})</td>
+                        <td>{step.right.label} (freq: {step.right.freq})</td>
+                        <td className="sum-cell"><strong>{step.sum}</strong> → {step.mergedLabel}</td>
+                        <td className="assignment-cell">{step.assignment}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className="code-building-explanation">
+                  <h4>How Codes are Built (Bottom-Up):</h4>
+                  <ol>
+                    <li>Start from the <strong>last step</strong> (final merge) - assign 0 to left, 1 to right</li>
+                    <li>Work backwards: if a node was merged in a previous step, prepend its code</li>
+                    <li>Continue until all characters have their complete codes</li>
+                    <li>More frequent characters end up with shorter codes</li>
+                  </ol>
+                </div>
+              </div>
+            )}
 
             <div className="encoded-section">
               <h3>Encoded Text</h3>
