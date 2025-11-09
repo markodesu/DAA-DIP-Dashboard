@@ -4,7 +4,7 @@ import "./Sidebar.css";
 export default function Sidebar() {
   return (
     <div className="sidebar">
-      <h2>DAA + DIP Dashboard</h2>
+      <h2>DAA + DIP Dashboard Made by Mariiam Manu and Aris</h2>
       <nav>
         <div className="nav-section">
           <h3>DAA - Algorithms</h3>
