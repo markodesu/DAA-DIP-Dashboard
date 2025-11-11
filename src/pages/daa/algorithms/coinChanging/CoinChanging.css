@@ -1,8 +1,25 @@
 .coin-changing-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #050812 0%, #0a1525 25%, #0d1b2a 50%, #0f1e2e 75%, #050812 100%);
+  background-attachment: fixed;
   padding: 2rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  position: relative;
+}
+
+.coin-changing-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(29, 78, 216, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .coin-changing-header {
@@ -27,18 +44,27 @@
 
 .input-section,
 .solution-section {
-  background: white;
-  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+    0 0 40px rgba(59, 130, 246, 0.08);
+  position: relative;
+  z-index: 1;
 }
 
 .input-section h2,
 .solution-section h2 {
-  color: #1e293b;
+  color: #f1f5f9;
   margin-bottom: 1.5rem;
-  border-bottom: 3px solid #667eea;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, #3b82f6, #2563eb, #1d4ed8) 1;
   padding-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
 }
 
 .amount-input {
@@ -99,35 +125,39 @@
 .add-btn,
 .solve-btn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+  color: #ffffff;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
   margin-top: 1rem;
   width: 100%;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .add-btn:hover,
 .solve-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
 }
 
 
 .solution-info {
-  background: #f8fafc;
+  background: rgba(15, 23, 42, 0.8);
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 .solution-info p {
   margin: 0.5rem 0;
-  color: #1e293b;
+  color: #f1f5f9;
   font-size: 1.1rem;
 }
 
@@ -136,13 +166,14 @@
 }
 
 .dp-table-container h3 {
-  color: #1e293b;
+  color: #f1f5f9;
   margin-bottom: 0.5rem;
   font-size: 1.3rem;
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }
 
 .table-explanation {
-  color: #64748b;
+  color: #cbd5e1;
   font-size: 0.9rem;
   margin-bottom: 1rem;
   font-style: italic;
@@ -155,21 +186,23 @@
 
 .dp-table th,
 .dp-table td {
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(59, 130, 246, 0.2);
   padding: 0.75rem;
   text-align: left;
+  color: #e2e8f0;
+  background: rgba(15, 23, 42, 0.6);
 }
 
 .dp-table th {
-  background: #667eea;
-  color: white;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+  color: #ffffff;
   font-weight: 600;
 }
 
 .dp-table .row-label {
-  background: #f1f5f9;
+  background: rgba(15, 23, 42, 0.8);
   font-weight: 600;
-  color: #1e293b;
+  color: #e2e8f0;
 }
 
 .dp-table td {
@@ -217,47 +250,52 @@
 .explanation-toggle {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: #667eea;
-  color: white;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+  color: #ffffff;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
   text-align: left;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
 }
 
 .explanation-toggle:hover {
-  background: #764ba2;
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
 }
 
 .explanation {
-  background: #f8fafc;
+  background: rgba(15, 23, 42, 0.8);
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #3b82f6;
   margin-top: 0.5rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 .explanation .formula {
-  background: white;
+  background: rgba(15, 23, 42, 0.9);
   padding: 0.75rem;
   border-radius: 4px;
   font-family: 'Courier New', monospace;
   font-size: 1rem;
   text-align: center;
   margin: 0.5rem 0;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #f1f5f9;
 }
 
 .explanation h3 {
-  color: #1e293b;
+  color: #f1f5f9;
   margin-bottom: 0.75rem;
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }
 
 .explanation p {
-  color: #64748b;
+  color: #cbd5e1;
   line-height: 1.6;
 }
 
