@@ -52,20 +52,43 @@ export default function CoinChanging() {
       }
     }
 
-    // Find coin combination using backtracking
+    // Find coin combination using backtracking and track path
     const combination = [];
+    const usedCells = new Set(); // Track which cells were used in the solution
     let current = amount;
     let coinIdx = n;
     
+    // Backtrack to find the actual path
     while (current > 0 && coinIdx > 0) {
       const coin = sortedCoins[coinIdx - 1];
-      // Check if this coin was used
+      
+      // Check if this coin was used in the optimal solution
       if (coin <= current && dp[coinIdx][current] === dp[coinIdx][current - coin] + 1) {
+        // This coin was used
         combination.push(coin);
+        // Mark the current cell (where we are)
+        usedCells.add(`${coinIdx}-${current}`);
+        // Mark the cell we came from (before using this coin)
+        usedCells.add(`${coinIdx}-${current - coin}`);
         current -= coin;
       } else {
+        // This coin was not used, value came from previous row
+        // Mark that we're using value from previous coin set
+        if (dp[coinIdx][current] === dp[coinIdx - 1][current]) {
+          usedCells.add(`${coinIdx - 1}-${current}`);
+        }
         coinIdx--;
       }
+    }
+    
+    // Mark the starting cell (0,0) if we reached it
+    if (current === 0) {
+      usedCells.add(`0-0`);
+    }
+    
+    // Mark the final solution cell
+    if (dp[n][amount] !== Infinity) {
+      usedCells.add(`${n}-${amount}`);
     }
 
     return {
@@ -73,6 +96,7 @@ export default function CoinChanging() {
       combination,
       minCoins: dp[n][amount] === Infinity ? -1 : dp[n][amount],
       sortedCoins,
+      usedCells,
     };
   };
 
@@ -146,26 +170,16 @@ export default function CoinChanging() {
                 <tbody>
                   <tr>
                     <td className="row-label">0 (no coins)</td>
-                    {solution.dp[0].map((value, i) => (
-                      <td
-                        key={i}
-                        className={
-                          value === Infinity ? "impossible-cell" : i === 0 ? "base-cell" : ""
-                        }
-                      >
-                        {value === Infinity ? "∞" : value}
-                      </td>
-                    ))}
-                  </tr>
-                  {solution.sortedCoins.map((coin, coinIdx) => (
-                    <tr key={coin}>
-                      <td className="row-label">Coin {coin}</td>
-                      {solution.dp[coinIdx + 1].map((value, i) => (
+                    {solution.dp[0].map((value, i) => {
+                      const cellKey = `0-${i}`;
+                      const isUsed = solution.usedCells && solution.usedCells.has(cellKey);
+                      
+                      return (
                         <td
                           key={i}
                           className={
-                            value !== Infinity && i === amount && coinIdx === solution.sortedCoins.length - 1
-                              ? "solution-cell"
+                            isUsed
+                              ? "used-cell"
                               : value === Infinity
                               ? "impossible-cell"
                               : i === 0
@@ -175,7 +189,36 @@ export default function CoinChanging() {
                         >
                           {value === Infinity ? "∞" : value}
                         </td>
-                      ))}
+                      );
+                    })}
+                  </tr>
+                  {solution.sortedCoins.map((coin, coinIdx) => (
+                    <tr key={coin}>
+                      <td className="row-label">Coin {coin}</td>
+                      {solution.dp[coinIdx + 1].map((value, i) => {
+                        const cellKey = `${coinIdx + 1}-${i}`;
+                        const isUsed = solution.usedCells && solution.usedCells.has(cellKey);
+                        const isFinalSolution = value !== Infinity && i === amount && coinIdx === solution.sortedCoins.length - 1;
+                        
+                        return (
+                          <td
+                            key={i}
+                            className={
+                              isFinalSolution
+                                ? "solution-cell final-solution"
+                                : isUsed
+                                ? "used-cell"
+                                : value === Infinity
+                                ? "impossible-cell"
+                                : i === 0
+                                ? "base-cell"
+                                : ""
+                            }
+                          >
+                            {value === Infinity ? "∞" : value}
+                          </td>
+                        );
+                      })}
                     </tr>
                   ))}
                 </tbody>

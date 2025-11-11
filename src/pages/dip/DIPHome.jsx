@@ -29,6 +29,12 @@ export default function DIPHome() {
           <p>Enhance contrast using histogram equalization</p>
         </Link>
 
+        <Link to="/dip/histogram-matching" className="filter-card">
+          <div className="filter-icon">🔗</div>
+          <h2>Histogram Matching</h2>
+          <p>Match histogram of one image to another</p>
+        </Link>
+
         <Link to="/dip/brightness-contrast" className="filter-card">
           <div className="filter-icon">☀️</div>
           <h2>Brightness & Contrast</h2>

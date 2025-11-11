@@ -11,6 +11,7 @@ import DIPHome from "./pages/dip/DIPHome";
 import GrayscalePage from "./pages/dip/filters/GrayscalePage";
 import NegativePage from "./pages/dip/filters/NegativePage";
 import HistogramPage from "./pages/dip/filters/HistogramPage";
+import HistogramMatchingPage from "./pages/dip/filters/HistogramMatchingPage";
 import BrightnessContrastPage from "./pages/dip/filters/BrightnessContrastPage";
 import EdgeDetectionPage from "./pages/dip/filters/EdgeDetectionPage";
 import ConvolutionPage from "./pages/dip/filters/ConvolutionPage";
@@ -46,6 +47,7 @@ export default function App() {
             <Route path="/dip/grayscale" element={<GrayscalePage />} />
             <Route path="/dip/negative" element={<NegativePage />} />
             <Route path="/dip/histogram" element={<HistogramPage />} />
+            <Route path="/dip/histogram-matching" element={<HistogramMatchingPage />} />
             <Route path="/dip/brightness-contrast" element={<BrightnessContrastPage />} />
             <Route path="/dip/edge-detection" element={<EdgeDetectionPage />} />
             <Route path="/dip/convolution" element={<ConvolutionPage />} />

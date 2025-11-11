@@ -159,6 +159,11 @@ export default function ANNCNNPage() {
     [[0.3, 0.2, 0.4, 0.1], [0.5, 0.3, 0.2, 0.4], [0.2, 0.5, 0.3, 0.2], [0.4, 0.2, 0.3, 0.5]],
     [[0.6, 0.4], [0.3, 0.7], [0.5, 0.3], [0.2, 0.8]]
   ]);
+  const [annBiases] = useState([
+    [0.1, 0.2, -0.1, 0.3],  // Biases for hidden layer 1
+    [-0.2, 0.1, 0.2, -0.1], // Biases for hidden layer 2
+    [0.1, -0.1]              // Biases for output layer
+  ]);
   const [annActivations, setAnnActivations] = useState([]);
   const [annActivationType, setAnnActivationType] = useState('sigmoid');
 
@@ -169,7 +174,7 @@ export default function ANNCNNPage() {
   const [cnnInput, setCnnInput] = useState(() => {
     const arr = [];
     for (let i = 0; i < 64; i++) {
-      arr.push(Math.random() > 0.5 ? 1 : 0);
+      arr.push(Math.random() * 255); // Full range of values 0-255
     }
     return arr;
   });
@@ -186,21 +191,25 @@ export default function ANNCNNPage() {
       const nextLayer = [];
 
       for (let j = 0; j < layerWeights[0].length; j++) {
+        // Compute H = W*values + bias
         let sum = 0;
         for (let i = 0; i < current.length; i++) {
           sum += current[i] * layerWeights[i][j];
         }
+        // Add bias term
+        sum += annBiases[l][j];
 
         let activated;
         switch (annActivationType) {
           case 'sigmoid':
             activated = sigmoid(sum);
             break;
-          case 'relu':
-            activated = relu(sum);
-            break;
           case 'tanh':
             activated = tanh(sum);
+            break;
+          case 'softmax':
+            // For softmax, we'll apply it to the entire layer at the end
+            activated = sum; // Store raw sum for now
             break;
           default:
             activated = sigmoid(sum);
@@ -209,8 +218,8 @@ export default function ANNCNNPage() {
         nextLayer.push(activated);
       }
 
-      // Apply softmax to output layer
-      if (l === annWeights.length - 1) {
+      // Apply softmax if selected or if it's the output layer
+      if (annActivationType === 'softmax' || (l === annWeights.length - 1 && annActivationType !== 'softmax')) {
         const softmaxValues = softmax(nextLayer);
         current = softmaxValues;
       } else {
@@ -234,10 +243,12 @@ export default function ANNCNNPage() {
     const outputSize = cnnInputSize - cnnFilterSize + 1;
     const featureMaps = [];
     
-    // Use fixed random seed for consistent results (in real CNN, these would be learned weights)
+    // Simplified 3x3 filters with simple integer values
+    // Filter 1: Simple edge detection
+    // Filter 2: Simple averaging
     const filterWeights = [
-      [[0.5, 0.3, 0.2], [0.4, 0.6, 0.3], [0.2, 0.4, 0.5]],
-      [[0.3, 0.2, 0.4], [0.5, 0.3, 0.2], [0.2, 0.5, 0.3]]
+      [[-1, -1, -1], [0, 0, 0], [1, 1, 1]],  // Horizontal edge detector (simple)
+      [[1, 1, 1], [1, 1, 1], [1, 1, 1]]     // Simple averaging (sum, then divide by 9)
     ];
 
     for (let f = 0; f < cnnFilters; f++) {
@@ -251,6 +262,11 @@ export default function ANNCNNPage() {
               sum += inputMatrix[i + fi][j + fj] * filterWeights[f][fi][fj];
             }
           }
+          // For filter 2 (averaging), divide by 9 to get average
+          if (f === 1) {
+            sum = sum / 9;
+          }
+          // Apply ReLU activation
           row.push(relu(sum));
         }
         featureMap.push(row);
@@ -278,22 +294,27 @@ export default function ANNCNNPage() {
 
     const prevLayer = layerIdx === 1 ? annInputs : annActivations[layerIdx - 1];
     const weights = annWeights[layerIdx - 1];
+    const bias = annBiases[layerIdx - 1][nodeIdx];
     
-    let calculation = `z = `;
+    // Show formula: H = W*values + bias
+    let calculation = `H = W × values + bias\n\n`;
+    calculation += `H = `;
     const terms = [];
     for (let i = 0; i < prevLayer.length; i++) {
       terms.push(`${prevLayer[i].toFixed(3)} × ${weights[i][nodeIdx].toFixed(3)}`);
     }
     calculation += terms.join(' + ');
+    calculation += ` + ${bias.toFixed(3)} (bias)\n`;
     
-    const sum = prevLayer.reduce((acc, val, i) => acc + val * weights[i][nodeIdx], 0);
-    calculation += ` = ${sum.toFixed(3)}\n`;
+    const weightedSum = prevLayer.reduce((acc, val, i) => acc + val * weights[i][nodeIdx], 0);
+    const sum = weightedSum + bias;
+    calculation += `H = ${weightedSum.toFixed(3)} + ${bias.toFixed(3)} = ${sum.toFixed(3)}\n\n`;
     
-    if (layerIdx === annLayers.length - 1) {
+    if (annActivationType === 'softmax' || layerIdx === annLayers.length - 1) {
       calculation += `Softmax: e^${sum.toFixed(3)} / Σ(e^z) = ${annActivations[layerIdx]?.[nodeIdx].toFixed(3)}`;
     } else {
-      const activationFunc = annActivationType === 'sigmoid' ? 'σ' : annActivationType === 'relu' ? 'ReLU' : 'tanh';
-      calculation += `${activationFunc}(${sum.toFixed(3)}) = ${annActivations[layerIdx]?.[nodeIdx].toFixed(3)}`;
+      const activationFunc = annActivationType === 'sigmoid' ? 'σ' : 'tanh';
+      calculation += `Activation: ${activationFunc}(H) = ${activationFunc}(${sum.toFixed(3)}) = ${annActivations[layerIdx]?.[nodeIdx].toFixed(3)}`;
     }
     
     return calculation;
@@ -302,7 +323,7 @@ export default function ANNCNNPage() {
   const regenerateCNNInput = () => {
     const newInput = [];
     for (let i = 0; i < 64; i++) {
-      newInput.push(Math.random() > 0.5 ? 1 : 0);
+      newInput.push(Math.random() * 255); // Full range of values 0-255
     }
     setCnnInput(newInput);
   };
@@ -359,9 +380,38 @@ export default function ANNCNNPage() {
                 onChange={(e) => setAnnActivationType(e.target.value)}
               >
                 <option value="sigmoid">Sigmoid</option>
-                <option value="relu">ReLU</option>
                 <option value="tanh">Tanh</option>
+                <option value="softmax">Softmax</option>
               </select>
+            </div>
+
+            <div className="control-group">
+              <h3>ANN Formula</h3>
+              <div style={{ 
+                background: '#f8fafc', 
+                padding: '1rem', 
+                borderRadius: '6px',
+                border: '2px solid #667eea'
+              }}>
+                <p style={{ 
+                  margin: 0, 
+                  fontFamily: 'monospace', 
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold',
+                  color: '#1e293b',
+                  textAlign: 'center'
+                }}>
+                  H = W × values + bias
+                </p>
+                <p style={{ 
+                  margin: '0.5rem 0 0 0', 
+                  fontSize: '0.85rem',
+                  color: '#64748b',
+                  textAlign: 'center'
+                }}>
+                  Click on any node to see detailed calculation
+                </p>
+              </div>
             </div>
           </div>
 
@@ -402,18 +452,6 @@ export default function ANNCNNPage() {
             </div>
 
             <div className="formula-section">
-              <h3>ReLU (Rectified Linear Unit)</h3>
-              <div className="formula-box">
-                <p className="formula">ReLU(x) = max(0, x)</p>
-                <p className="formula-desc">Output range: [0, ∞)</p>
-                <div className="example">
-                  <p>Example: ReLU(3) = {relu(3).toFixed(4)}</p>
-                  <p>Example: ReLU(-2) = {relu(-2).toFixed(4)}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="formula-section">
               <h3>Tanh (Hyperbolic Tangent)</h3>
               <div className="formula-box">
                 <p className="formula">tanh(x) = (e^x - e^(-x)) / (e^x + e^(-x))</p>
@@ -440,12 +478,27 @@ export default function ANNCNNPage() {
             <div className="formula-section">
               <h3>Forward Propagation Formula</h3>
               <div className="formula-box">
-                <p className="formula-alt">For each layer l:</p>
-                <p className="formula">z^[l] = W^[l] · a^[l-1] + b^[l]</p>
-                <p className="formula">a^[l] = g(z^[l])</p>
+                <p className="formula-alt">For each neuron in a layer:</p>
+                <p className="formula">H = W × values + bias</p>
                 <p className="formula-desc">
-                  Where W is weight matrix, a is activation, b is bias, and g is activation function
+                  Where:
+                  <br />• H = weighted sum (before activation)
+                  <br />• W = weight matrix
+                  <br />• values = input values from previous layer
+                  <br />• bias = bias term (added to the sum)
                 </p>
+                <p className="formula-alt" style={{ marginTop: '1rem' }}>Then apply activation function:</p>
+                <p className="formula">Output = g(H)</p>
+                <p className="formula-desc">
+                  Where g is the activation function (Sigmoid, Tanh, or Softmax)
+                </p>
+                <div className="example" style={{ marginTop: '1rem' }}>
+                  <p><strong>Example:</strong></p>
+                  <p>If values = [1.0, 0.5, 0.8], weights = [0.5, 0.3, 0.2], bias = 0.1</p>
+                  <p>H = (1.0 × 0.5) + (0.5 × 0.3) + (0.8 × 0.2) + 0.1</p>
+                  <p>H = 0.5 + 0.15 + 0.16 + 0.1 = 0.91</p>
+                  <p>Then: Output = σ(0.91) = {sigmoid(0.91).toFixed(4)}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -475,7 +528,10 @@ export default function ANNCNNPage() {
             <h2>Convolutional Neural Network (CNN)</h2>
             <p>
               CNNs use convolutional layers to detect features in images. Each filter scans the input
-              and produces a feature map through convolution operations.
+              and produces a feature map through convolution operations. ReLU activation is applied after convolution.
+            </p>
+            <p style={{ marginTop: '0.5rem', fontStyle: 'italic', color: '#64748b' }}>
+              <strong>Filters used:</strong> Filter 1 detects horizontal edges (simple: -1, 0, 1), Filter 2 averages values (simple: all 1s, then divide by 9).
             </p>
           </div>
 
@@ -488,15 +544,22 @@ export default function ANNCNNPage() {
                 </button>
               </div>
               <div className="matrix-grid">
-                {Array.from({ length: 64 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`matrix-cell ${cnnInput[i] > 0.5 ? 'active' : ''}`}
-                    style={{ opacity: cnnInput[i] }}
-                  >
-                    {cnnInput[i].toFixed(1)}
-                  </div>
-                ))}
+                {Array.from({ length: 64 }).map((_, i) => {
+                  const value = Math.round(cnnInput[i]);
+                  const isActive = value > 127;
+                  return (
+                    <div
+                      key={i}
+                      className={`matrix-cell ${isActive ? 'active' : ''}`}
+                      style={{ 
+                        backgroundColor: isActive ? `rgba(102, 126, 234, ${value / 255})` : `rgba(226, 232, 240, ${1 - value / 255})`,
+                        color: isActive ? 'white' : '#1e293b'
+                      }}
+                    >
+                      {value}
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -506,15 +569,28 @@ export default function ANNCNNPage() {
                 <div key={fIdx} className="feature-map">
                   <h4>Filter {fIdx + 1}</h4>
                   <div className="matrix-grid small">
-                    {featureMap.flat().map((val, i) => (
-                      <div
-                        key={i}
-                        className={`matrix-cell ${val > 0 ? 'active' : ''}`}
-                        style={{ opacity: Math.min(val / 5, 1) }}
-                      >
-                        {val.toFixed(2)}
-                      </div>
-                    ))}
+                    {featureMap.flat().map((val, i) => {
+                      const roundedVal = Math.round(val);
+                      const isPositive = roundedVal > 0;
+                      const absVal = Math.abs(roundedVal);
+                      const maxVal = Math.max(...featureMap.flat().map(v => Math.abs(Math.round(v))));
+                      const normalizedVal = maxVal > 0 ? absVal / maxVal : 0;
+                      return (
+                        <div
+                          key={i}
+                          className={`matrix-cell ${isPositive ? 'active' : ''}`}
+                          style={{ 
+                            backgroundColor: isPositive 
+                              ? `rgba(102, 126, 234, ${Math.max(0.3, normalizedVal)})` 
+                              : `rgba(226, 232, 240, ${Math.max(0.3, 1 - normalizedVal)})`,
+                            color: isPositive ? 'white' : '#1e293b',
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          {roundedVal}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -525,21 +601,25 @@ export default function ANNCNNPage() {
             <h2>CNN Formulas & Operations</h2>
 
             <div className="formula-section">
-              <h3>Convolution Operation</h3>
+              <h3>Convolution Operation (Simple)</h3>
               <div className="formula-box">
-                <p className="formula">(I * K)[i,j] = Σ(m=0 to M-1) Σ(n=0 to N-1) I[i+m, j+n] × K[m, n]</p>
+                <p className="formula">For each position: Multiply filter values with input values, then sum them</p>
                 <p className="formula-desc">
-                  Where I is input, K is kernel/filter, and * denotes convolution
+                  Example: If filter is [[1,1,1], [1,1,1], [1,1,1]] and input region is [[10,20,30], [40,50,60], [70,80,90]]:
+                  <br />
+                  Result = 1×10 + 1×20 + 1×30 + 1×40 + 1×50 + 1×60 + 1×70 + 1×80 + 1×90 = 450
+                  <br />
+                  Then divide by 9 to get average: 450/9 = 50
                 </p>
               </div>
             </div>
 
             <div className="formula-section">
-              <h3>Feature Map Size</h3>
+              <h3>Feature Map Size (Simple)</h3>
               <div className="formula-box">
-                <p className="formula">Output Size = (Input Size - Filter Size + 2×Padding) / Stride + 1</p>
+                <p className="formula">Output Size = Input Size - Filter Size + 1</p>
                 <p className="formula-desc">
-                  In our example: (8 - 3 + 0) / 1 + 1 = 6×6
+                  In our example: 8 - 3 + 1 = 6 (so we get a 6×6 output from an 8×8 input)
                 </p>
               </div>
             </div>
@@ -555,11 +635,11 @@ export default function ANNCNNPage() {
             </div>
 
             <div className="formula-section">
-              <h3>Pooling (Max Pooling)</h3>
+              <h3>Pooling (Simple)</h3>
               <div className="formula-box">
-                <p className="formula">Pool[i,j] = max(Region[i×stride : (i+1)×stride, j×stride : (j+1)×stride])</p>
+                <p className="formula">Take the maximum value from each 2×2 region</p>
                 <p className="formula-desc">
-                  Reduces spatial dimensions and provides translation invariance
+                  Example: If region is [[10, 20], [30, 40]], the max is 40. This makes the feature map smaller.
                 </p>
               </div>
             </div>

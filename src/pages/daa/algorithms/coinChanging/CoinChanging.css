@@ -193,6 +193,22 @@
   font-weight: 600;
 }
 
+.dp-table .used-cell {
+  background: #fef3c7;
+  color: #92400e;
+  font-weight: 700;
+  border: 2px solid #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.dp-table .final-solution {
+  background: #10b981;
+  color: white;
+  font-weight: 700;
+  border: 3px solid #059669;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+}
+
 
 .explanation-section {
   margin-top: 1.5rem;

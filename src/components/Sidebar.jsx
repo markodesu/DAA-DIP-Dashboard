@@ -25,6 +25,7 @@ export default function Sidebar() {
             <li><Link to="/dip/grayscale">Grayscale</Link></li>
             <li><Link to="/dip/negative">Negative</Link></li>
             <li><Link to="/dip/histogram">Histogram Equalization</Link></li>
+            <li><Link to="/dip/histogram-matching">Histogram Matching</Link></li>
             <li><Link to="/dip/brightness-contrast">Brightness & Contrast</Link></li>
             <li><Link to="/dip/blur">Blur</Link></li>
             <li><Link to="/dip/edge-detection">Edge Detection</Link></li>
